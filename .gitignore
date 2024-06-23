@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+Bank System Test.vcxproj
+Bank System Test.vcxproj.filters
