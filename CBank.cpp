@@ -1,6 +1,12 @@
 #include "CBank.h"
 #include <fstream>
 #include <iostream>
+#include <conio.h>
+
+int CBank::checkInput()
+{
+	return _getch();
+}
 
 void CBank::loadAccounts()
 {
@@ -81,6 +87,8 @@ void CBank::writeAccountsToFile()
 
 void CBank::createAccount()
 {
+	system("cls");
+	std::cout << "Creating Account\n";
 	SAccount tAccount;
 	std::cout << "First Name: ";
 	std::cin >> tAccount.firstName;
@@ -97,7 +105,19 @@ void CBank::createAccount()
 	m_accounts.push_back(tAccount);
 }
 
-CBank::CBank()
+void CBank::destroyAccount()
+{
+	system("cls");
+	int aSize = m_accounts.size();
+	std::cout << "Account List Size:" << aSize + 1 << '\n';
+
+	for (unsigned int i = 0; i < m_accounts.size(); i++)
+	{
+		std::cout << m_accounts[i].firstName << " " << m_accounts[i].middleName << " " << m_accounts[i].lastName << '\n';
+	}
+}
+
+CBank::CBank() : m_renderState(OPTIONS)
 {
 	loadAccounts();
 }
@@ -107,15 +127,54 @@ CBank::~CBank()
 	writeAccountsToFile();
 }
 
-void CBank::update()
+bool CBank::update()
 {
-	createAccount();
+	int keyVal = checkInput();
+	if (keyVal != 27)
+	{
+		std::cout << keyVal << std::endl;
+		switch (keyVal)
+		{
+		case 49: // 1
+			createAccount();
+			break;
+		case 50: // 2
+			destroyAccount();
+			break;
+		case 51: // 3
+			m_renderState = RENDER_STATE::ACCOUNTLIST;
+			break;
+		default:
+			break;
+		}
+		//createAccount();
+	}
+	else
+		return false;
+	return true;
 }
 
 void CBank::render()
 {
-	for (unsigned int i = 0; i < m_accounts.size(); i++)
+	system("cls");
+	switch (m_renderState)
 	{
-		std::cout << m_accounts[i].firstName << " " << m_accounts[i].middleName << " " << m_accounts[i].lastName << " " << m_accounts[i].balance << std::endl;
+	case NONE:
+		break;
+	case OPTIONS:
+		std::cout << "Options:\n"
+			<< "Create Account (1)\n"
+			<< "Delete Account (2)\n"
+			<< "Show Accounts (3)\n";
+		break;
+	case ACCOUNTLIST:
+		for (unsigned int i = 0; i < m_accounts.size(); i++)
+		{
+			std::cout << m_accounts[i].firstName << " " << m_accounts[i].middleName << " " << m_accounts[i].lastName << " " << m_accounts[i].balance << std::endl;
+		}
+		m_renderState = RENDER_STATE::OPTIONS;
+		break;
+	default:
+		break;
 	}
 }

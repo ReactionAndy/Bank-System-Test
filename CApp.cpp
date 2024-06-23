@@ -10,6 +10,10 @@ CApp::~CApp()
 
 void CApp::run()
 {
-	m_bank.update();
-	m_bank.render();
+	while (true)
+	{
+		m_bank.render();
+		if (!m_bank.update())
+			return;
+	}
 }

@@ -3,3 +3,13 @@ m Taxi
 l Sebastian
 b 123.245000
 .
+f Lemon
+m Muman
+l Loman
+b 1000.000000
+.
+f 20
+m 2000
+l 200
+b 20000.000000
+.
